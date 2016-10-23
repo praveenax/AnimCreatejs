@@ -1,52 +1,58 @@
-var PAGE1_TEXT_1 = "Erster Akt";
-var PAGE1_TEXT_2 = "Hier etwas zum Thema.\nDen Lieblingssitz auswashlen \nist so einfach wie...";
-
 function init() {
     // code here.
 
 
 }
 
+var stage;
+var wid;
+var hei;
+
 $(document).on("ready", function () {
-    var stage = new createjs.Stage("demoCanvas");
+    stage = new createjs.Stage("canvas");
     var circle = new createjs.Shape();
-    var wid = window.innerWidth;
-    var hei = window.innerHeight;
+    wid = window.innerWidth;
+    hei = window.innerHeight;
 
     circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
     circle.x = 0.2 * wid;
     circle.y = 100;
     //            stage.addChild(circle);
 
-    var text = new createjs.Text();
-    text.set({
+
+
+
+    var t1 = new createjs.Text();
+
+    t1.set({
         text: 'Hello',
         color: '#FFF',
         font: "bold 40px Dorsa"
     });
 
-    var b = text.getBounds();
+
+    var b = t1.getBounds();
 
     console.log(b);
-    text.x = 0.1 * wid;
+    t1.x = 0.1 * wid;
     //                - b.width/2; 
-    text.y = 100;
+    t1.y = 100;
     //            - b.height/2;
 
-    //            stage.addChild(text);
-
-    var text2 = new createjs.Text();
-    text2.set({
+    //    stage.addChild(t1);
+    var text2 = new Text({
         text: PAGE1_TEXT_1,
         color: '#FFF',
         font: "bold 26px Dorsa"
     });
+
+
+    console.log(text2);
     var b2 = text2.getBounds();
-    //            var b = text.getBounds();
+
+
     text2.x = 0.5 * wid - b2.width / 2;
-    //                - b.width/2; 
     text2.y = 30;
-    //            - b.height/2;
 
     stage.addChild(text2);
 
@@ -80,42 +86,104 @@ $(document).on("ready", function () {
     //                - b.width/2; 
     //            text3.y = 80;
     //            - b.height/2;
-    text3.width = 0.4 * wid;
+    //    text3.width = 0.4 * wid;
     b3.width = 0.4 * wid;
 
-    //            stage.addChild(text3);
+    stage.addChild(text3);
 
 
 
     container.addChild(text3);
     stage.addChild(container);
 
-    createjs.Tween.get(text, {
-            loop: false
-        })
-        .to({
-            x: 0.8 * wid
-        }, 1000, createjs.Ease.getPowInOut(4))
-        //                .to({
-        //                    alpha: 0,
-        //                    y: 175
-        //                }, 500, createjs.Ease.getPowInOut(2))
-        //                .to({
-        //                    alpha: 0,
-        //                    y: 225
-        //                }, 100)
-        //                .to({
-        //                    alpha: 1,
-        //                    y: 200
-        //                }, 500, createjs.Ease.getPowInOut(2))
-        .to({
-            x: 0.1 * wid,
-            y: 0.8 * hei
-        }, 800, createjs.Ease.getPowInOut(2))
-        .to({
-            x: 0.1 * wid,
-            y: 100
-        }, 800, createjs.Ease.getPowInOut(2));
+    var container3 = new createjs.Container();
+
+    for (var i = 0; i < test_data["categories"].length; i++) {
+
+        var tmp_radius = 40;
+        var circle_prop = {
+            "fill": "#fff",
+            "x": 0,
+            "y": 0,
+            "r": tmp_radius
+        };
+        var c1 = new Circle(circle_prop);
+
+        var diff_i = i / 3;
+        var perc_i = i % 2;
+        c1.x = 0.2 * wid + tmp_radius * 3.5 * diff_i;
+        c1.y = 0.3 * hei + tmp_radius * 3.5 * perc_i;
+
+        //        if (c1.x + tmp_radius * 2 > wid) {
+        //            c1.x = 0.1 * getRand(1, 3) * wid + tmp_radius * 2;
+        //        }
+        //
+        //        if (c1.y + tmp_radius * 2 > hei) {
+        //            c1.y = 0.3 * getRand(1, 3) * hei + tmp_radius * 2;
+        //        }
+
+
+        var ct1 = new createjs.Text();
+
+        ct1.set({
+            text: test_data["categories"][i],
+            color: '#990066',
+            font: "bold 16px Dorsa"
+        });
+
+
+        var cb = ct1.getBounds();
+
+        console.log(cb);
+        ct1.x = c1.x - cb.width / 2;
+        //                - b.width/2; 
+        ct1.y = c1.y - cb.height / 2;
+        //            - b.height/2;
+
+        //    stage.addChild(t1);
+
+
+
+        var container2 = new createjs.Container();
+        container2.x = 0.1 * wid;
+        container2.y = 0;
+        container2.width = 0.8 * wid;
+        container2.height = 40;
+
+        container2.addChild(c1, ct1);
+        container3.addChild(container2);
+
+    }
+
+
+    stage.addChild(container3);
+
+    //    createjs.Tween.get(c1, {
+    //            loop: false
+    //        })
+    //        .to({
+    //            x: 0.5 * wid
+    //        }, 1000, createjs.Ease.getPowInOut(4))
+    //                .to({
+    //                    alpha: 0,
+    //                    y: 175
+    //                }, 500, createjs.Ease.getPowInOut(2))
+    //                .to({
+    //                    alpha: 0,
+    //                    y: 225
+    //                }, 100)
+    //                .to({
+    //                    alpha: 1,
+    //                    y: 200
+    //                }, 500, createjs.Ease.getPowInOut(2))
+    //        .to({
+    //            x: 0.1 * wid,
+    //            y: 0.6 * hei
+    //        }, 800, createjs.Ease.getPowInOut(2))
+    //        .to({
+    //            x: 0.1 * wid,
+    //            y: 100
+    //        }, 800, createjs.Ease.getPowInOut(2));
 
     stage.update();
 
@@ -127,18 +195,15 @@ $(document).on("ready", function () {
     function resizeCanvas() {
 
         console.log(window.innerWidth);
-        $("#demoCanvas").attr("width", window.innerWidth);
-        $("#demoCanvas").attr("height", window.innerHeight);
+        $("#canvas").attr("width", window.innerWidth);
+        $("#canvas").attr("height", window.innerHeight);
 
-        /**
-         * Your drawings need to be inside this function otherwise they will be reset when 
-         * you resize the browser window and the canvas goes will be cleared.
-         */
+
         drawStuff();
     }
     resizeCanvas();
 
     function drawStuff() {
-        // do your drawing stuff here
+
     }
 });
